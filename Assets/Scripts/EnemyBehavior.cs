@@ -25,7 +25,7 @@ public class EnemyBehavior : MonoBehaviour {
 
 	void Fire(){
 		GameObject missile = Instantiate(projectile, transform.position, Quaternion.identity) as GameObject;
-		missile.rigidbody2D.velocity = new Vector2(0, -projectileSpeed);
+		missile.GetComponent<Rigidbody2D>().velocity = new Vector2(0, -projectileSpeed);
 		AudioSource.PlayClipAtPoint(fireSound, transform.position);
 	}
 
