@@ -3,11 +3,19 @@ using System.Collections;
 
 public class EnemyBehavior : MonoBehaviour {
 	public GameObject projectile;
-	
 	public float health = 150f;
 	public float projectileSpeed = 10;
 	public float shotsPerSeconds = 0.5f;
+	public int scoreValue = 150;
+	public AudioClip fireSound;
+	public AudioClip deathSound;
+	
+	private Scorekeeper scoreKeeper;
 
+	void Start(){
+		scoreKeeper = GameObject.Find ("Score").GetComponent<Scorekeeper>();
+	}
+	
 	void Update(){
 		float probability = Time.deltaTime * shotsPerSeconds;
 		if (Random.value < probability){
@@ -16,9 +24,9 @@ public class EnemyBehavior : MonoBehaviour {
 	}
 
 	void Fire(){
-		Vector3 startPosition = transform.position + new Vector3(0,-1,0);
-		GameObject missile = Instantiate(projectile, startPosition, Quaternion.identity) as GameObject;
+		GameObject missile = Instantiate(projectile, transform.position, Quaternion.identity) as GameObject;
 		missile.rigidbody2D.velocity = new Vector2(0, -projectileSpeed);
+		AudioSource.PlayClipAtPoint(fireSound, transform.position);
 	}
 
 
@@ -29,6 +37,8 @@ public class EnemyBehavior : MonoBehaviour {
 			missile.Hit();
 			if (health <= 0){
 				Destroy (gameObject);
+				scoreKeeper.Score(scoreValue);
+				AudioSource.PlayClipAtPoint(deathSound, transform.position);
 			}
 		}
 	}
